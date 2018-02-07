@@ -1,0 +1,504 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="instModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Begeni">
+          <Key>
+            <PropertyRef Name="begeniId" />
+          </Key>
+          <Property Name="begeniId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GonderiId" Type="int" Nullable="false" />
+          <Property Name="BegenenKisiId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Gonderi">
+          <Key>
+            <PropertyRef Name="GonderiId" />
+          </Key>
+          <Property Name="GonderiId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="loginId" Type="int" Nullable="false" />
+          <Property Name="tarih" Type="datetime" Nullable="false" />
+          <Property Name="Aciklama" Type="nvarchar" MaxLength="50" />
+          <Property Name="Url" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="kullaniciBilgi">
+          <Key>
+            <PropertyRef Name="kullaniciId" />
+          </Key>
+          <Property Name="kullaniciId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ad" Type="nvarchar" MaxLength="50" />
+          <Property Name="soyad" Type="nvarchar" MaxLength="50" />
+          <Property Name="dogumTarihi" Type="datetime" />
+          <Property Name="mail" Type="nvarchar" MaxLength="50" />
+          <Property Name="telefon" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="kullaniciLogin">
+          <Key>
+            <PropertyRef Name="loginId" />
+          </Key>
+          <Property Name="loginId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kulBilgiId" Type="int" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pass" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Takip">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TakipEden" Type="int" Nullable="false" />
+          <Property Name="TakipEdilen" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Yorum">
+          <Key>
+            <PropertyRef Name="yorumId" />
+          </Key>
+          <Property Name="yorumId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="gonderiId" Type="int" Nullable="false" />
+          <Property Name="yorumYapanId" Type="int" Nullable="false" />
+          <Property Name="tarih" Type="datetime" Nullable="false" />
+          <Property Name="yorum" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Begeni_Gonderi">
+          <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="1" />
+          <End Role="Begeni" Type="Self.Begeni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gonderi">
+              <PropertyRef Name="GonderiId" />
+            </Principal>
+            <Dependent Role="Begeni">
+              <PropertyRef Name="GonderiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Begeni_kullaniciLogin">
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="1" />
+          <End Role="Begeni" Type="Self.Begeni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciLogin">
+              <PropertyRef Name="loginId" />
+            </Principal>
+            <Dependent Role="Begeni">
+              <PropertyRef Name="BegenenKisiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Gonderi_kullaniciLogin">
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="1" />
+          <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciLogin">
+              <PropertyRef Name="loginId" />
+            </Principal>
+            <Dependent Role="Gonderi">
+              <PropertyRef Name="loginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullaniciLogin_kullaniciBilgi">
+          <End Role="kullaniciBilgi" Type="Self.kullaniciBilgi" Multiplicity="1" />
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciBilgi">
+              <PropertyRef Name="kullaniciId" />
+            </Principal>
+            <Dependent Role="kullaniciLogin">
+              <PropertyRef Name="kulBilgiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Takip_kullaniciBilgi">
+          <End Role="kullaniciBilgi" Type="Self.kullaniciBilgi" Multiplicity="1" />
+          <End Role="Takip" Type="Self.Takip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciBilgi">
+              <PropertyRef Name="kullaniciId" />
+            </Principal>
+            <Dependent Role="Takip">
+              <PropertyRef Name="TakipEden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Takip_kullaniciBilgi1">
+          <End Role="kullaniciBilgi" Type="Self.kullaniciBilgi" Multiplicity="1" />
+          <End Role="Takip" Type="Self.Takip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciBilgi">
+              <PropertyRef Name="kullaniciId" />
+            </Principal>
+            <Dependent Role="Takip">
+              <PropertyRef Name="TakipEdilen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Yorum_Gonderi">
+          <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="1" />
+          <End Role="Yorum" Type="Self.Yorum" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gonderi">
+              <PropertyRef Name="GonderiId" />
+            </Principal>
+            <Dependent Role="Yorum">
+              <PropertyRef Name="gonderiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Yorum_kullaniciLogin">
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="1" />
+          <End Role="Yorum" Type="Self.Yorum" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciLogin">
+              <PropertyRef Name="loginId" />
+            </Principal>
+            <Dependent Role="Yorum">
+              <PropertyRef Name="yorumYapanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="instModelStoreContainer">
+          <EntitySet Name="Begeni" EntityType="Self.Begeni" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Gonderi" EntityType="Self.Gonderi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kullaniciBilgi" EntityType="Self.kullaniciBilgi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kullaniciLogin" EntityType="Self.kullaniciLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Takip" EntityType="Self.Takip" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Yorum" EntityType="Self.Yorum" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Begeni_Gonderi" Association="Self.FK_Begeni_Gonderi">
+            <End Role="Gonderi" EntitySet="Gonderi" />
+            <End Role="Begeni" EntitySet="Begeni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Begeni_kullaniciLogin" Association="Self.FK_Begeni_kullaniciLogin">
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+            <End Role="Begeni" EntitySet="Begeni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Gonderi_kullaniciLogin" Association="Self.FK_Gonderi_kullaniciLogin">
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+            <End Role="Gonderi" EntitySet="Gonderi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullaniciLogin_kullaniciBilgi" Association="Self.FK_kullaniciLogin_kullaniciBilgi">
+            <End Role="kullaniciBilgi" EntitySet="kullaniciBilgi" />
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Takip_kullaniciBilgi" Association="Self.FK_Takip_kullaniciBilgi">
+            <End Role="kullaniciBilgi" EntitySet="kullaniciBilgi" />
+            <End Role="Takip" EntitySet="Takip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Takip_kullaniciBilgi1" Association="Self.FK_Takip_kullaniciBilgi1">
+            <End Role="kullaniciBilgi" EntitySet="kullaniciBilgi" />
+            <End Role="Takip" EntitySet="Takip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Yorum_Gonderi" Association="Self.FK_Yorum_Gonderi">
+            <End Role="Gonderi" EntitySet="Gonderi" />
+            <End Role="Yorum" EntitySet="Yorum" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Yorum_kullaniciLogin" Association="Self.FK_Yorum_kullaniciLogin">
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+            <End Role="Yorum" EntitySet="Yorum" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="instModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Begeni">
+          <Key>
+            <PropertyRef Name="begeniId" />
+          </Key>
+          <Property Name="begeniId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GonderiId" Type="Int32" Nullable="false" />
+          <Property Name="BegenenKisiId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Gonderi" Relationship="Self.FK_Begeni_Gonderi" FromRole="Begeni" ToRole="Gonderi" />
+          <NavigationProperty Name="kullaniciLogin" Relationship="Self.FK_Begeni_kullaniciLogin" FromRole="Begeni" ToRole="kullaniciLogin" />
+        </EntityType>
+        <EntityType Name="Gonderi">
+          <Key>
+            <PropertyRef Name="GonderiId" />
+          </Key>
+          <Property Name="GonderiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="loginId" Type="Int32" Nullable="false" />
+          <Property Name="tarih" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Aciklama" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Begeni" Relationship="Self.FK_Begeni_Gonderi" FromRole="Gonderi" ToRole="Begeni" />
+          <NavigationProperty Name="kullaniciLogin" Relationship="Self.FK_Gonderi_kullaniciLogin" FromRole="Gonderi" ToRole="kullaniciLogin" />
+          <NavigationProperty Name="Yorum" Relationship="Self.FK_Yorum_Gonderi" FromRole="Gonderi" ToRole="Yorum" />
+        </EntityType>
+        <EntityType Name="kullaniciBilgi">
+          <Key>
+            <PropertyRef Name="kullaniciId" />
+          </Key>
+          <Property Name="kullaniciId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dogumTarihi" Type="DateTime" Precision="3" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="telefon" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="kullaniciLogin" Relationship="Self.FK_kullaniciLogin_kullaniciBilgi" FromRole="kullaniciBilgi" ToRole="kullaniciLogin" />
+          <NavigationProperty Name="Takip" Relationship="Self.FK_Takip_kullaniciBilgi" FromRole="kullaniciBilgi" ToRole="Takip" />
+          <NavigationProperty Name="Takip1" Relationship="Self.FK_Takip_kullaniciBilgi1" FromRole="kullaniciBilgi" ToRole="Takip" />
+        </EntityType>
+        <EntityType Name="kullaniciLogin">
+          <Key>
+            <PropertyRef Name="loginId" />
+          </Key>
+          <Property Name="loginId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kulBilgiId" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Begeni" Relationship="Self.FK_Begeni_kullaniciLogin" FromRole="kullaniciLogin" ToRole="Begeni" />
+          <NavigationProperty Name="Gonderi" Relationship="Self.FK_Gonderi_kullaniciLogin" FromRole="kullaniciLogin" ToRole="Gonderi" />
+          <NavigationProperty Name="kullaniciBilgi" Relationship="Self.FK_kullaniciLogin_kullaniciBilgi" FromRole="kullaniciLogin" ToRole="kullaniciBilgi" />
+          <NavigationProperty Name="Yorum" Relationship="Self.FK_Yorum_kullaniciLogin" FromRole="kullaniciLogin" ToRole="Yorum" />
+        </EntityType>
+        <EntityType Name="Takip">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TakipEden" Type="Int32" Nullable="false" />
+          <Property Name="TakipEdilen" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="kullaniciBilgi" Relationship="Self.FK_Takip_kullaniciBilgi" FromRole="Takip" ToRole="kullaniciBilgi" />
+          <NavigationProperty Name="kullaniciBilgi1" Relationship="Self.FK_Takip_kullaniciBilgi1" FromRole="Takip" ToRole="kullaniciBilgi" />
+        </EntityType>
+        <EntityType Name="Yorum">
+          <Key>
+            <PropertyRef Name="yorumId" />
+          </Key>
+          <Property Name="yorumId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="gonderiId" Type="Int32" Nullable="false" />
+          <Property Name="yorumYapanId" Type="Int32" Nullable="false" />
+          <Property Name="tarih" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="yorum1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Gonderi" Relationship="Self.FK_Yorum_Gonderi" FromRole="Yorum" ToRole="Gonderi" />
+          <NavigationProperty Name="kullaniciLogin" Relationship="Self.FK_Yorum_kullaniciLogin" FromRole="Yorum" ToRole="kullaniciLogin" />
+        </EntityType>
+        <Association Name="FK_Begeni_Gonderi">
+          <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="1" />
+          <End Role="Begeni" Type="Self.Begeni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gonderi">
+              <PropertyRef Name="GonderiId" />
+            </Principal>
+            <Dependent Role="Begeni">
+              <PropertyRef Name="GonderiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Begeni_kullaniciLogin">
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="1" />
+          <End Role="Begeni" Type="Self.Begeni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciLogin">
+              <PropertyRef Name="loginId" />
+            </Principal>
+            <Dependent Role="Begeni">
+              <PropertyRef Name="BegenenKisiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Gonderi_kullaniciLogin">
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="1" />
+          <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciLogin">
+              <PropertyRef Name="loginId" />
+            </Principal>
+            <Dependent Role="Gonderi">
+              <PropertyRef Name="loginId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Yorum_Gonderi">
+          <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="1" />
+          <End Role="Yorum" Type="Self.Yorum" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gonderi">
+              <PropertyRef Name="GonderiId" />
+            </Principal>
+            <Dependent Role="Yorum">
+              <PropertyRef Name="gonderiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_kullaniciLogin_kullaniciBilgi">
+          <End Role="kullaniciBilgi" Type="Self.kullaniciBilgi" Multiplicity="1" />
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciBilgi">
+              <PropertyRef Name="kullaniciId" />
+            </Principal>
+            <Dependent Role="kullaniciLogin">
+              <PropertyRef Name="kulBilgiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Takip_kullaniciBilgi">
+          <End Role="kullaniciBilgi" Type="Self.kullaniciBilgi" Multiplicity="1" />
+          <End Role="Takip" Type="Self.Takip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciBilgi">
+              <PropertyRef Name="kullaniciId" />
+            </Principal>
+            <Dependent Role="Takip">
+              <PropertyRef Name="TakipEden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Takip_kullaniciBilgi1">
+          <End Role="kullaniciBilgi" Type="Self.kullaniciBilgi" Multiplicity="1" />
+          <End Role="Takip" Type="Self.Takip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciBilgi">
+              <PropertyRef Name="kullaniciId" />
+            </Principal>
+            <Dependent Role="Takip">
+              <PropertyRef Name="TakipEdilen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Yorum_kullaniciLogin">
+          <End Role="kullaniciLogin" Type="Self.kullaniciLogin" Multiplicity="1" />
+          <End Role="Yorum" Type="Self.Yorum" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kullaniciLogin">
+              <PropertyRef Name="loginId" />
+            </Principal>
+            <Dependent Role="Yorum">
+              <PropertyRef Name="yorumYapanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="instEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Begeni" EntityType="Self.Begeni" />
+          <EntitySet Name="Gonderi" EntityType="Self.Gonderi" />
+          <EntitySet Name="kullaniciBilgi" EntityType="Self.kullaniciBilgi" />
+          <EntitySet Name="kullaniciLogin" EntityType="Self.kullaniciLogin" />
+          <EntitySet Name="Takip" EntityType="Self.Takip" />
+          <EntitySet Name="Yorum" EntityType="Self.Yorum" />
+          <AssociationSet Name="FK_Begeni_Gonderi" Association="Self.FK_Begeni_Gonderi">
+            <End Role="Gonderi" EntitySet="Gonderi" />
+            <End Role="Begeni" EntitySet="Begeni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Begeni_kullaniciLogin" Association="Self.FK_Begeni_kullaniciLogin">
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+            <End Role="Begeni" EntitySet="Begeni" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Gonderi_kullaniciLogin" Association="Self.FK_Gonderi_kullaniciLogin">
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+            <End Role="Gonderi" EntitySet="Gonderi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Yorum_Gonderi" Association="Self.FK_Yorum_Gonderi">
+            <End Role="Gonderi" EntitySet="Gonderi" />
+            <End Role="Yorum" EntitySet="Yorum" />
+          </AssociationSet>
+          <AssociationSet Name="FK_kullaniciLogin_kullaniciBilgi" Association="Self.FK_kullaniciLogin_kullaniciBilgi">
+            <End Role="kullaniciBilgi" EntitySet="kullaniciBilgi" />
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Takip_kullaniciBilgi" Association="Self.FK_Takip_kullaniciBilgi">
+            <End Role="kullaniciBilgi" EntitySet="kullaniciBilgi" />
+            <End Role="Takip" EntitySet="Takip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Takip_kullaniciBilgi1" Association="Self.FK_Takip_kullaniciBilgi1">
+            <End Role="kullaniciBilgi" EntitySet="kullaniciBilgi" />
+            <End Role="Takip" EntitySet="Takip" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Yorum_kullaniciLogin" Association="Self.FK_Yorum_kullaniciLogin">
+            <End Role="kullaniciLogin" EntitySet="kullaniciLogin" />
+            <End Role="Yorum" EntitySet="Yorum" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="instModelStoreContainer" CdmEntityContainer="instEntities1">
+          <EntitySetMapping Name="Begeni">
+            <EntityTypeMapping TypeName="instModel.Begeni">
+              <MappingFragment StoreEntitySet="Begeni">
+                <ScalarProperty Name="begeniId" ColumnName="begeniId" />
+                <ScalarProperty Name="GonderiId" ColumnName="GonderiId" />
+                <ScalarProperty Name="BegenenKisiId" ColumnName="BegenenKisiId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gonderi">
+            <EntityTypeMapping TypeName="instModel.Gonderi">
+              <MappingFragment StoreEntitySet="Gonderi">
+                <ScalarProperty Name="GonderiId" ColumnName="GonderiId" />
+                <ScalarProperty Name="loginId" ColumnName="loginId" />
+                <ScalarProperty Name="tarih" ColumnName="tarih" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kullaniciBilgi">
+            <EntityTypeMapping TypeName="instModel.kullaniciBilgi">
+              <MappingFragment StoreEntitySet="kullaniciBilgi">
+                <ScalarProperty Name="kullaniciId" ColumnName="kullaniciId" />
+                <ScalarProperty Name="ad" ColumnName="ad" />
+                <ScalarProperty Name="soyad" ColumnName="soyad" />
+                <ScalarProperty Name="dogumTarihi" ColumnName="dogumTarihi" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="telefon" ColumnName="telefon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kullaniciLogin">
+            <EntityTypeMapping TypeName="instModel.kullaniciLogin">
+              <MappingFragment StoreEntitySet="kullaniciLogin">
+                <ScalarProperty Name="loginId" ColumnName="loginId" />
+                <ScalarProperty Name="kulBilgiId" ColumnName="kulBilgiId" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="pass" ColumnName="pass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Takip">
+            <EntityTypeMapping TypeName="instModel.Takip">
+              <MappingFragment StoreEntitySet="Takip">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TakipEden" ColumnName="TakipEden" />
+                <ScalarProperty Name="TakipEdilen" ColumnName="TakipEdilen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Yorum">
+            <EntityTypeMapping TypeName="instModel.Yorum">
+              <MappingFragment StoreEntitySet="Yorum">
+                <ScalarProperty Name="yorumId" ColumnName="yorumId" />
+                <ScalarProperty Name="gonderiId" ColumnName="gonderiId" />
+                <ScalarProperty Name="yorumYapanId" ColumnName="yorumYapanId" />
+                <ScalarProperty Name="tarih" ColumnName="tarih" />
+                <ScalarProperty Name="yorum1" ColumnName="yorum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

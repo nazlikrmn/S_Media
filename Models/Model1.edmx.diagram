@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="67b06412e9844e71961c5cebb88088f6" Name="Diagram1">
+        <EntityTypeShape EntityType="instModel.Begeni" Width="1.5" PointX="8.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="instModel.Gonderi" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="instModel.kullaniciBilgi" Width="1.5" PointX="0.5" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="instModel.kullaniciLogin" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="instModel.Takip" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="instModel.Yorum" Width="1.5" PointX="8.25" PointY="2.375" IsExpanded="true" />
+        <AssociationConnector Association="instModel.FK_Begeni_Gonderi" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_Begeni_kullaniciLogin" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_Gonderi_kullaniciLogin" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_Yorum_Gonderi" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_kullaniciLogin_kullaniciBilgi" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_Takip_kullaniciBilgi" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_Takip_kullaniciBilgi1" ManuallyRouted="false" />
+        <AssociationConnector Association="instModel.FK_Yorum_kullaniciLogin" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
